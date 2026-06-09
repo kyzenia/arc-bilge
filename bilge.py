@@ -9,7 +9,7 @@ def readText():
 
 def mainMenu():
     sharp, blank = "# "*44, ""
-    title = "Welcome To Bilge v0.1"
+    title = "Welcome To Bilge v0.2"
     subtitle = "Please select among available options below (1-3):"
     slc1 = "                 1) Encrypt Text"
     slc2 = "                 2) Decrypt Text"
