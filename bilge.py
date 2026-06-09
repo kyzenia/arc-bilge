@@ -33,9 +33,10 @@ def mainMenuSelection():
             loop = 1
         else:
             loop = 0
-    if userChoice == 2:
+    if userChoice == 1:
         while loop2 == 1:
-            try:        
+            try:
+                userSeed = int(input("Enter your seed (int): "))
                 uKey = int(input("Enter your key: "))
             except:
                 print("\nPlease enter a valid key")
@@ -44,11 +45,12 @@ def mainMenuSelection():
                 uKey = str(uKey)
                 userKey = [num for num in uKey]
                 loop2 = 0
-        import decrypt
-        decrypt.main(readText(), userKey)
-    elif userChoice == 1:
+        import encrypt
+        encrypt.main(readText(), userKey, userSeed)
+    elif userChoice == 2:
         while loop3 == 1:
-            try:        
+            try:
+                userSeed = int(input("Enter your seed (int): "))
                 uKey = int(input("Enter your key: "))
             except:
                 print("\nPlease enter a valid key")
@@ -57,8 +59,8 @@ def mainMenuSelection():
                 uKey = str(uKey)
                 userKey = [num for num in uKey]
                 loop3 = 0
-        import encrypt
-        encrypt.main(readText(), userKey)
+        import decrypt
+        decrypt.main(readText(), userKey, userSeed)
     else:
         import credits
         credits.main()
