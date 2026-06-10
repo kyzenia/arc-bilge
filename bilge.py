@@ -2,13 +2,13 @@ def readText():
     loop = 1
     while loop == 1:
         try:
-            dottxt = open("text.txt", "r")
+            dottxt = open("text.txt", "r", encoding="utf-8")
             text = dottxt.read()
             dottxt.close()
             loop = 0
             return text
         except FileNotFoundError:
-            dottxt = open("text.txt", "w")
+            dottxt = open("text.txt", "w", encoding="utf-8")
             text = '''This is a test message. Please replace the contents of the file "text.txt" with your own before using Bilge again.'''
             dottxt.write(text)
             dottxt.close()
@@ -18,7 +18,7 @@ def readText():
 
 def mainMenu():
     sharp, blank = "# "*44, ""
-    title = "Welcome To Bilge v0.2.5"
+    title = "Welcome To Bilge v1.0"
     subtitle = "Please select among available options below (1-3):"
     slc1 = "                 1) Encrypt Text"
     slc2 = "                 2) Decrypt Text"

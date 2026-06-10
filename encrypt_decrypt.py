@@ -19,7 +19,7 @@ def encrypt(pre_list_char, pre_list_num, userKey, alfabetas, rev_alfabetas, text
         post_character = rev_alfabetas[post_number][char_code]
         text_ready.append(post_character)
     text_ready = "".join(text_ready)
-    dottxt = open("text.txt", "w")
+    dottxt = open("text.txt", "w", encoding="utf-8")
     dottxt.write(text_ready)
     dottxt.close()
 
@@ -32,7 +32,7 @@ def decrypt(pre_list_char, pre_list_num, alfabetas, rev_alfabetas):
         post_character = rev_alfabetas[0].get(char_code)
         text_ready.append(post_character)
     text_ready = "".join(text_ready)
-    dottxt = open("text.txt", "w")
+    dottxt = open("text.txt", "w", encoding="utf-8")
     dottxt.write(text_ready)
     dottxt.close()
 
