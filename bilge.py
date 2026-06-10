@@ -1,15 +1,24 @@
 def readText():
-    try:
-        dottxt = open("text.txt", "r")
-        text = dottxt.read()
-        dottxt.close()
-        return text
-    except:
-        print("Oops! >> bilge.py >> readText() >> except:")
+    loop = 1
+    while loop == 1:
+        try:
+            dottxt = open("text.txt", "r")
+            text = dottxt.read()
+            dottxt.close()
+            loop = 0
+            return text
+        except FileNotFoundError:
+            dottxt = open("text.txt", "w")
+            text = '''This is a test message. Please replace the contents of the file "text.txt" with your own before using Bilge again.'''
+            dottxt.write(text)
+            dottxt.close()
+            loop = 1
+        except:
+            print("Oops! >> bilge.py >> readText() >> except:")
 
 def mainMenu():
     sharp, blank = "# "*44, ""
-    title = "Welcome To Bilge v0.2"
+    title = "Welcome To Bilge v0.2.5"
     subtitle = "Please select among available options below (1-3):"
     slc1 = "                 1) Encrypt Text"
     slc2 = "                 2) Decrypt Text"
@@ -18,7 +27,7 @@ def mainMenu():
           f"#{slc2:<85}#\n"f"#{exit:<85}#\n"f"#{blank:^85}#\n"f"{sharp}\n")
 
 def mainMenuSelection():
-    loop, loop1, loop2, loop3 = 1, 1, 1, 1
+    loop, loop1, loop2, loop3, userChoice = 1, 1, 1, 1, None
     while loop == 1:
         try:
             while loop1 == 1:
@@ -36,34 +45,38 @@ def mainMenuSelection():
     if userChoice == 1:
         while loop2 == 1:
             try:
-                userSeed = int(input("Enter your seed (int): "))
-                uKey = int(input("Enter your key: "))
+                userSeed = int(input("Enter your seed (integer): "))
+                uKey = int(input("Enter your key (positive integer): "))
             except:
-                print("\nPlease enter a valid key")
+                print("\nPlease enter a valid seed/key!")
                 loop2 = 1
             else:
+                if uKey < 0:
+                    uKey = (uKey * (-1))
                 uKey = str(uKey)
                 userKey = [num for num in uKey]
                 loop2 = 0
-        import encrypt
-        encrypt.main(readText(), userKey, userSeed)
+        import encrypt_decrypt
+        encrypt_decrypt.main(readText(), userKey, userSeed, userChoice)
     elif userChoice == 2:
         while loop3 == 1:
             try:
-                userSeed = int(input("Enter your seed (int): "))
-                uKey = int(input("Enter your key: "))
+                userSeed = int(input("Enter your seed (integer): "))
+                uKey = int(input("Enter your key (positive integer): "))
             except:
-                print("\nPlease enter a valid key")
+                print("\nPlease enter a valid seed/key!")
                 loop3 = 1
             else:
+                if uKey < 0:
+                    uKey = (uKey * (-1))
                 uKey = str(uKey)
                 userKey = [num for num in uKey]
                 loop3 = 0
-        import decrypt
-        decrypt.main(readText(), userKey, userSeed)
+        import encrypt_decrypt
+        encrypt_decrypt.main(readText(), userKey, userSeed, userChoice)
     else:
-        import credits
-        credits.main()
+        from credits import credits
+        credits()
         input("Have a great day!\nPlease press enter to exit the program...")
 
 def main():
