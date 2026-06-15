@@ -18,7 +18,7 @@ def readText():
 
 def mainMenu():
     sharp, blank = "# "*44, ""
-    title = "Bilge v1.0.1"
+    title = "Bilge v1.1.0"
     subtitle = "Please select among available options below (1-3):"
     slc1 = "                 1) Encrypt Text"
     slc2 = "                 2) Decrypt Text"

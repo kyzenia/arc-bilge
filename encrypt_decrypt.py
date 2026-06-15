@@ -1,4 +1,4 @@
-def assign(text, userKey="0"):
+def assign(text, userKey):
     from itertools import cycle
     cycle_it = cycle(userKey)
     list_char,list_num = [],[]
@@ -8,17 +8,23 @@ def assign(text, userKey="0"):
         list_num.append(num)
     return list_char, list_num
 
-def encrypt(pre_list_char, pre_list_num, userKey, alfabetas, rev_alfabetas, text):
+def assignNum(text, userKey):
+    from itertools import cycle
+    cycle_it = cycle(userKey)
+    list_num = []
+    for char in text:
+        num = next(cycle_it)
+        list_num.append(num)
+    return list_num
+
+def encrypt(userKey, alfabetas, rev_alfabetas, text):
     try:
-        text_ready = []
+        text_ready, pre_list_char = [], []
+        post_list_num = assignNum(text, userKey)
+        for char in text:
+            pre_list_char.append(char)
         for i in range(len(pre_list_char)):
-            pre_character = pre_list_char[i]
-            char_code = alfabetas[0].get(pre_character)
-            post_list_char, post_list_num = assign(text, userKey)
-            post_number = post_list_num[i]
-            post_number = int(post_number)
-            post_character = rev_alfabetas[post_number][char_code]
-            text_ready.append(post_character)
+            text_ready.append(rev_alfabetas[int(post_list_num[i])][alfabetas[0].get(pre_list_char[i])])
     except KeyError:
         print("\nFailed to encrypt your text due to unsupported characters! Supported characters as of now are:")
         import generator
@@ -33,11 +39,7 @@ def encrypt(pre_list_char, pre_list_num, userKey, alfabetas, rev_alfabetas, text
 def decrypt(pre_list_char, pre_list_num, alfabetas, rev_alfabetas):
     text_ready = []
     for i in range(len(pre_list_char)):
-        pre_character = pre_list_char[i]
-        pre_num = pre_list_num[i]
-        char_code = alfabetas[int(pre_num)].get(pre_character)
-        post_character = rev_alfabetas[0].get(char_code)
-        text_ready.append(post_character)
+        text_ready.append(rev_alfabetas[0].get(alfabetas[int(pre_list_num[i])].get(pre_list_char[i])))
     try:
         text_ready = "".join(text_ready)
         dottxt = open("text.txt", "w", encoding="utf-8")
@@ -51,10 +53,9 @@ def decrypt(pre_list_char, pre_list_num, alfabetas, rev_alfabetas):
 
 def main(text, userKey, userSeed, userChoice):
     if userChoice == 1:
-        list_char, list_num = assign(text)
         from generator import generator
         alfabetas, rev_alfabetas = generator(userSeed)
-        if encrypt(list_char, list_num, userKey, alfabetas, rev_alfabetas, text) == 0:
+        if encrypt(userKey, alfabetas, rev_alfabetas, text) == 0:
             import bilge
             bilge.main()
         else:
