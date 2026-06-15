@@ -1,7 +1,7 @@
+base = '''\n !"#%&'()*+,-./0123456789:;<=>?@ABCÇDEFGĞHIİJKLMNOÖPQRSŞTUÜVWXYZ[]^_`abcçdefgğhıijklmnoöpqrsştuüvwxyz{|}~'''
 def generator(userSeed):
     import random
     alfabetas, rev_alfabetas = [], []
-    base = '''\n !"#%&'()*+,-./0123456789:;<=>?@ABCÇDEFGĞHIİJKLMNOÖPQRSŞTUÜVWXYZ[]^_`abcçdefgğhıijklmnoöpqrsştuüvwxyz{|}~'''
     list_char = list(base)
     dict_alfabeta = {key: item for item, key in enumerate(list_char)}
     alfabetas.append(dict_alfabeta)
