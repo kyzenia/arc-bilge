@@ -73,7 +73,7 @@ def encrypt(user_key, alfabetas, rev_alfabetas):
             with open("text.txt", "w", encoding="utf-8") as file_create:
                 file_create.write('''This is a test message. Please replace the contents of the file "text.txt" with your own before using Bilge again.''')
                 check = True
-        except TypeError:
+        except KeyError:
             file = Path("temp.txt")
             if file.exists():
                 file.unlink()
@@ -95,7 +95,7 @@ def decrypt(user_key, alfabetas, rev_alfabetas):
             with open("text.txt", "w", encoding="utf-8") as file_create:
                 file_create.write('''This is a test message. Please replace the contents of the file "text.txt" with your own before using Bilge again.''')
                 check = True
-        except TypeError:
+        except KeyError:
             file = Path("temp.txt")
             if file.exists():
                 file.unlink()
