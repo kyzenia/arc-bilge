@@ -1,12 +1,12 @@
 import random
 from pathlib import Path
 from itertools import cycle
-DATA_CHUNKS = 8 * 1024 * 1024
+DATA_CHUNKS = 1 * 64 * 1024
 
 def main():
     print("\n# # # # # # # # # # # # # # # # # # # # # # # # # # # # #")
     print("#                                                       #")
-    print("#                      Bilge v2.0.0                     #")
+    print("#                      Bilge v2.1.0                     #")
     print("#                                                       #")
     print("#   Please select among available options below (1-3):  #")
     print("#                                                       #")
@@ -61,14 +61,19 @@ def get_user_seed_and_key():
             print("\nPlease enter a valid seed/key!\n")
 
 def encrypt(user_key, alfabetas, rev_alfabetas):
+    CHUNK = DATA_CHUNKS
+    alfabeta0 = alfabetas[0]
+    rev = rev_alfabetas
     key_iter = cycle(user_key)
     check = True
     while check:
         try:
             with open("text.txt", "r", encoding="utf-8") as file_in, open("temp.txt", "w", encoding="utf-8") as file_out:
-                while data_chunk := file_in.read(DATA_CHUNKS):
-                    data_ready = "".join(rev_alfabetas[next(key_iter)][alfabetas[0][value]]for value in data_chunk)
-                    file_out.write(data_ready)
+                read = file_in.read
+                write = file_out.write
+                while data_chunk := read(CHUNK):
+                    data_ready = "".join(rev[next(key_iter)][alfabeta0[value]]for value in data_chunk)
+                    write(data_ready)
         except FileNotFoundError:
             with open("text.txt", "w", encoding="utf-8") as file_create:
                 file_create.write('''This is a test message. Please replace the contents of the file "text.txt" with your own before using Bilge again.''')
@@ -78,24 +83,39 @@ def encrypt(user_key, alfabetas, rev_alfabetas):
             if file.exists():
                 file.unlink()
             return 1
+        except KeyboardInterrupt:
+            file = Path("temp.txt")
+            if file.exists():
+                file.unlink()
+            return 1
         else:
             check = False
             return 0
 
 def decrypt(user_key, alfabetas, rev_alfabetas):
+    CHUNK = DATA_CHUNKS
+    rev_alfabeta0 = rev_alfabetas[0]
+    alfabe = alfabetas
     key_iter = cycle(user_key)
     check = True
     while check:
         try:
             with open("text.txt", "r", encoding="utf-8") as file_in, open("temp.txt", "w", encoding="utf-8") as file_out:
-                while data_chunk := file_in.read(DATA_CHUNKS):
-                    data_ready = "".join(rev_alfabetas[0][alfabetas[next(key_iter)][value]]for value in data_chunk)
-                    file_out.write(data_ready)
+                read = file_in.read
+                write = file_out.write
+                while data_chunk := read(CHUNK):
+                    data_ready = "".join(rev_alfabeta0[alfabe[next(key_iter)][value]]for value in data_chunk)
+                    write(data_ready)
         except FileNotFoundError:
             with open("text.txt", "w", encoding="utf-8") as file_create:
                 file_create.write('''This is a test message. Please replace the contents of the file "text.txt" with your own before using Bilge again.''')
                 check = True
         except KeyError:
+            file = Path("temp.txt")
+            if file.exists():
+                file.unlink()
+            return 1
+        except KeyboardInterrupt:
             file = Path("temp.txt")
             if file.exists():
                 file.unlink()
