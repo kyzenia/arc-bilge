@@ -1,12 +1,12 @@
 import random
 from pathlib import Path
 from itertools import cycle
-DATA_CHUNKS = 1 * 64 * 1024
+DATA_CHUNKS = 16 * 1024
 
 def main():
     print("\n# # # # # # # # # # # # # # # # # # # # # # # # # # # # #")
     print("#                                                       #")
-    print("#                      Bilge v2.1.0                     #")
+    print("#                      Bilge v2.1.1                     #")
     print("#                                                       #")
     print("#   Please select among available options below (1-3):  #")
     print("#                                                       #")
@@ -64,7 +64,8 @@ def encrypt(user_key, alfabetas, rev_alfabetas):
     CHUNK = DATA_CHUNKS
     alfabeta0 = alfabetas[0]
     rev = rev_alfabetas
-    key_iter = cycle(user_key)
+    key = user_key
+    key_iter = cycle(key)
     check = True
     while check:
         try:
@@ -72,8 +73,11 @@ def encrypt(user_key, alfabetas, rev_alfabetas):
                 read = file_in.read
                 write = file_out.write
                 while data_chunk := read(CHUNK):
-                    data_ready = "".join(rev[next(key_iter)][alfabeta0[value]]for value in data_chunk)
-                    write(data_ready)
+                    data_ready = []
+                    append = data_ready.append
+                    for value in data_chunk:
+                        append(rev[next(key_iter)][alfabeta0[value]])
+                    write("".join(data_ready))
         except FileNotFoundError:
             with open("text.txt", "w", encoding="utf-8") as file_create:
                 file_create.write('''This is a test message. Please replace the contents of the file "text.txt" with your own before using Bilge again.''')
@@ -96,7 +100,8 @@ def decrypt(user_key, alfabetas, rev_alfabetas):
     CHUNK = DATA_CHUNKS
     rev_alfabeta0 = rev_alfabetas[0]
     alfabe = alfabetas
-    key_iter = cycle(user_key)
+    key = user_key
+    key_iter = cycle(key)
     check = True
     while check:
         try:
@@ -104,8 +109,11 @@ def decrypt(user_key, alfabetas, rev_alfabetas):
                 read = file_in.read
                 write = file_out.write
                 while data_chunk := read(CHUNK):
-                    data_ready = "".join(rev_alfabeta0[alfabe[next(key_iter)][value]]for value in data_chunk)
-                    write(data_ready)
+                    data_ready = []
+                    append = data_ready.append
+                    for value in data_chunk:
+                        append(rev_alfabeta0[alfabe[next(key_iter)][value]])
+                    write("".join(data_ready))
         except FileNotFoundError:
             with open("text.txt", "w", encoding="utf-8") as file_create:
                 file_create.write('''This is a test message. Please replace the contents of the file "text.txt" with your own before using Bilge again.''')
